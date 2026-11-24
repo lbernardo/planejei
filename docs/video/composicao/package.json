@@ -1,0 +1,11 @@
+{
+  "name": "planejei-video",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "render": "node render.mjs"
+  },
+  "dependencies": {
+    "puppeteer-core": "^25.18.1"
+  }
+}

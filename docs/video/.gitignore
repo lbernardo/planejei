@@ -1,0 +1,5 @@
+build/
+composicao/node_modules/
+composicao/stills/
+composicao/sheet*.png
+trecho.mp4

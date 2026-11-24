@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Planejei — vídeo de apresentação</title>
+<style>
+  :root {
+    --bg: #0e1420;
+    --bg2: #1a2436;
+    --ink: #f4f1ea;
+    --muted: #a9b3c4;
+    --blue: #4c9bff;
+    --wood: #d9a96a;
+    --sage: #a9c2a7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+  body {
+    font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  #stage {
+    position: absolute; inset: 0;
+    background: radial-gradient(1400px 900px at 30% 20%, var(--bg2), var(--bg) 70%);
+  }
+  .scene { position: absolute; inset: 0; opacity: 0; will-change: opacity, transform; }
+
+  /* Janela com a captura do programa */
+  .frame {
+    position: absolute; left: 160px; top: 36px; width: 1600px; height: 904px;
+    border-radius: 18px; overflow: hidden; background: #f6f6f6;
+    box-shadow: 0 40px 120px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.08);
+  }
+  .frame .cam { position: absolute; left: 0; top: 0; width: 1600px; height: 904px; transform-origin: 0 0; }
+  .frame img.shot { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
+  .hl {
+    position: absolute; border: 4px solid var(--blue); border-radius: 12px;
+    box-shadow: 0 0 0 9999px rgba(10,16,28,.28), 0 0 30px rgba(76,155,255,.6); opacity: 0;
+  }
+  .tag {
+    position: absolute; padding: 14px 24px; border-radius: 14px; font-size: 30px; font-weight: 650;
+    background: var(--blue); color: #fff; box-shadow: 0 14px 40px rgba(0,0,0,.35); white-space: nowrap; opacity: 0;
+  }
+  .tag.wood { background: var(--wood); color: #2a1d0c; }
+  .chips { position: absolute; display: flex; gap: 14px; flex-wrap: wrap; }
+  .chip {
+    padding: 12px 22px; border-radius: 999px; font-size: 28px; font-weight: 600; opacity: 0;
+    background: rgba(14,20,32,.88); color: var(--ink); border: 1px solid rgba(255,255,255,.14);
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  }
+
+  /* Legendas */
+  #caption {
+    position: absolute; left: 0; right: 0; bottom: 34px; text-align: center; pointer-events: none;
+  }
+  #caption span {
+    display: inline-block; max-width: 1500px; padding: 12px 26px; border-radius: 14px;
+    font-size: 38px; line-height: 1.25; font-weight: 600; color: #fff;
+    background: rgba(8,12,20,.78); opacity: 0;
+  }
+
+  /* Telas de texto */
+  .center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .hook { font-size: 92px; font-weight: 750; line-height: 1.12; letter-spacing: -1.5px; max-width: 1500px; }
+  .hook .w { display: inline-block; opacity: 0; margin: 0 .12em; }
+  .hook .w.accent { color: var(--wood); }
+  /* O ícone tem margem transparente (padrão do macOS): a sombra segue o desenho, não o quadrado. */
+  .logo { width: 270px; height: 270px; margin: -25px 0; filter: drop-shadow(0 26px 40px rgba(0,0,0,.5)); }
+  .brand { font-size: 150px; font-weight: 800; letter-spacing: -4px; margin-top: 26px; }
+  .tagline { font-size: 46px; color: var(--muted); margin-top: 10px; font-weight: 500; }
+  .tagline b { color: var(--wood); font-weight: 700; }
+  .kicker { font-size: 34px; color: var(--blue); font-weight: 700; letter-spacing: 6px; text-transform: uppercase; }
+
+  .key {
+    position: absolute; width: 150px; height: 150px; border-radius: 26px; display: flex; align-items: center; justify-content: center;
+    font-size: 86px; font-weight: 700; color: #1d2333; background: linear-gradient(#ffffff, #dfe3ea);
+    box-shadow: 0 10px 0 #9aa3b2, 0 30px 60px rgba(0,0,0,.45); opacity: 0;
+  }
+
+  .counter {
+    position: absolute; right: 120px; bottom: 150px; padding: 26px 40px; border-radius: 22px; opacity: 0;
+    background: rgba(14,20,32,.94); border: 1px solid rgba(255,255,255,.12); box-shadow: 0 30px 80px rgba(0,0,0,.5);
+  }
+  .counter small { display: block; font-size: 28px; color: var(--muted); font-weight: 600; }
+  .counter div { font-size: 84px; font-weight: 800; color: var(--wood); font-variant-numeric: tabular-nums; letter-spacing: -1px; }
+
+  .cards { position: absolute; left: 0; right: 0; top: 150px; display: flex; justify-content: center; gap: 56px; }
+  .card { width: 520px; opacity: 0; }
+  .card .pic {
+    height: 560px; border-radius: 20px; overflow: hidden; background: #fff; position: relative;
+    box-shadow: 0 30px 80px rgba(0,0,0,.5);
+  }
+  .card .pic img { position: absolute; left: 0; top: 0; width: 100%; height: auto; }
+  .card h3 { font-size: 40px; margin-top: 26px; font-weight: 750; }
+  .card p { font-size: 28px; color: var(--muted); margin-top: 6px; }
+  .badge { display: inline-block; margin-left: 12px; padding: 4px 14px; border-radius: 10px; font-size: 26px; vertical-align: middle; background: var(--blue); color: #fff; }
+
+  .lines { font-size: 104px; font-weight: 800; letter-spacing: -2px; line-height: 1.15; }
+  .lines div { opacity: 0; }
+  .lines .wood { color: var(--wood); }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- 1. Gancho -->
+  <section class="scene" id="s1"><div class="center"><div class="hook" id="hook"></div></div></section>
+
+  <!-- 2. Marca e cozinha -->
+  <section class="scene" id="s2a"><div class="center">
+    <img class="logo" src="img/icon.png" alt="">
+    <div class="brand">Planejei</div>
+    <div class="tagline">Do desenho ao <b>orçamento</b>, em minutos.</div>
+  </div></section>
+  <section class="scene" id="s2b"><div class="frame"><div class="cam"><img class="shot" src="img/s02.png"></div></div></section>
+
+  <!-- 3. Ambiente -->
+  <section class="scene" id="s3"><div class="frame"><div class="cam">
+    <img class="shot" src="img/s03.png">
+    <div class="hl" id="s3hl1" style="left:1290px;top:146px;width:306px;height:156px"></div>
+    <div class="hl" id="s3hl2" style="left:1292px;top:334px;width:228px;height:38px"></div>
+  </div></div>
+  <div class="tag" id="s3t1" style="left:940px;top:250px">Medidas do ambiente</div>
+  <div class="tag wood" id="s3t2" style="left:940px;top:330px">ou importe do GeoArq</div>
+  </section>
+
+  <!-- 4. Galeria -->
+  <section class="scene" id="s4"><div class="frame"><div class="cam" id="s4cam">
+    <img class="shot" id="k1" src="img/s04_1.png"><img class="shot" id="k2" src="img/s04_2.png">
+    <img class="shot" id="k3" src="img/s04_3.png"><img class="shot" id="k4" src="img/s04_4.png">
+    <img class="shot" id="k5" src="img/s04_5.png"><img class="shot" id="k6" src="img/s04_6.png">
+    <img class="shot" id="k7" src="img/s04_7.png"><img class="shot" id="k8" src="img/s04_8.png">
+    <div class="hl" id="s4hl" style="left:6px;top:110px;width:254px;height:352px"></div>
+  </div></div>
+  <div class="chips" id="s4chips" style="left:470px;top:780px;width:1250px"></div>
+  <div class="tag" id="s4t" style="left:1180px;top:110px">Encaixa sozinho na parede</div>
+  </section>
+
+  <!-- 5. Propriedades -->
+  <section class="scene" id="s5"><div class="frame"><div class="cam" id="s5cam">
+    <img class="shot" id="s5a" src="img/s05a.png"><img class="shot" id="s5b" src="img/s05b.png">
+  </div></div>
+  <div class="chips" id="s5chips" style="left:220px;top:760px;width:1000px"></div>
+  <div class="tag wood" id="s5t" style="left:760px;top:110px">Tudo se recalcula na hora</div>
+  </section>
+
+  <!-- 6. Ocultar frentes -->
+  <section class="scene" id="s6"><div class="frame"><div class="cam" id="s6cam">
+    <img class="shot" src="img/s02.png"><img class="shot" id="s6b" src="img/s06.png">
+  </div></div>
+  <div class="key" id="s6key" style="left:1530px;top:700px">F</div>
+  </section>
+
+  <!-- 7. Lista de peças -->
+  <section class="scene" id="s7"><div class="frame"><div class="cam" id="s7cam"><img class="shot" src="img/s07.png"></div></div>
+  <div class="chips" id="s7chips" style="left:1140px;top:640px;width:560px;flex-direction:column;align-items:flex-start"></div>
+  </section>
+
+  <!-- 8. Plano de corte -->
+  <section class="scene" id="s8"><div class="frame"><div class="cam" id="s8cam"><img class="shot" src="img/s08.png"></div></div>
+  <div class="chips" id="s8chips" style="left:220px;top:800px;width:1500px"></div>
+  </section>
+
+  <!-- 9. Orçamento -->
+  <section class="scene" id="s9"><div class="frame"><div class="cam" id="s9cam"><img class="shot" src="img/s09.png"></div></div>
+  <div class="counter" id="s9c"><small>Total do projeto</small><div id="s9v">R$ 0,00</div></div>
+  </section>
+
+  <!-- 10. Exportações -->
+  <section class="scene" id="s10">
+    <div class="cards">
+      <div class="card" id="c1"><div class="pic"><img src="img/s07.png" style="width:1560px;left:-12px;top:-30px"></div>
+        <h3>Lista de peças <span class="badge">CSV</span></h3><p>direto para a seccionadora</p></div>
+      <div class="card" id="c2"><div class="pic"><img src="img/plano-de-corte.svg" style="width:560px;left:-20px;top:-10px"></div>
+        <h3>Plano de corte <span class="badge">SVG</span></h3><p>chapa por chapa</p></div>
+      <div class="card" id="c3"><div class="pic"><img src="img/s10_html.png" style="width:760px;left:-14px;top:-14px"></div>
+        <h3>Proposta <span class="badge">HTML</span></h3><p>pronta para o cliente</p></div>
+    </div>
+  </section>
+
+  <!-- 11. Benefícios -->
+  <section class="scene" id="s11"><div class="center"><div class="lines">
+    <div id="l1">Leve.</div><div id="l2">Rápido.</div><div id="l3" class="wood">Sem pagar caro por módulo.</div>
+  </div></div></section>
+
+  <!-- 12. Encerramento -->
+  <section class="scene" id="s12"><div class="center">
+    <img class="logo" src="img/icon.png" alt="">
+    <div class="brand">Planejei</div>
+    <div class="tagline">Do projeto ao corte, <b>sem complicação</b>.</div>
+  </div></section>
+
+  <div id="caption"><span id="cap"></span></div>
+</div>
+
+<script>
+// ---------------------------------------------------------------- tempos
+// Início de cada parágrafo da narração (s), medidos pelas pausas do áudio.
+const OFF = 0.4;                       // o áudio começa 0,4 s depois do vídeo
+const AUDIO = 74.27;
+const DURATION = OFF + AUDIO + 2.2;    // segura o logo no final
+const B = [0, 3.71, 10.82, 16.36, 26.78, 37.05, 42.27, 49.74, 54.45, 61.5, 67.41, 70.87, AUDIO];
+const at = a => a + OFF;               // tempo do áudio → tempo do vídeo
+
+const NARRATION = [
+  "Projetar móveis planejados não precisa custar uma fortuna.",
+  "Conheça o Planejei. O programa que leva o seu projeto de marcenaria do desenho até o orçamento, em minutos.",
+  "Comece pelo ambiente. Informe as medidas da parede, ou importe o cômodo direto do GeoArq.",
+  "Depois, é só escolher na galeria: balcões, gaveteiros, aéreos, torres, roupeiros e nichos. Cada módulo encaixa sozinho na parede e se alinha ao vizinho.",
+  "Precisa ajustar? Mude largura, altura, profundidade, portas, gavetas e prateleiras. Troque o acabamento da caixa e das frentes. Tudo se recalcula na hora.",
+  "Quer ver por dentro? Esconda as portas com uma tecla e confira cada prateleira e divisória.",
+  "Enquanto você desenha, o Planejei monta a lista de peças, com medidas, fita de borda e ferragens.",
+  "E gera o plano de corte: cada chapa desenhada, com o desconto da serra, o refilo e o sentido do veio.",
+  "O orçamento sai pronto. Chapas, fita, ferragens, mão de obra e margem, tudo editável com os seus preços.",
+  "No fim, exporte a lista para a seccionadora, o plano de corte e uma proposta completa para o cliente.",
+  "Leve, rápido, e sem pagar caro por cada módulo.",
+  "Planejei. Do projeto ao corte, sem complicação.",
+];
+// Telas que já mostram o texto falado não levam legenda.
+const NO_CAPTION = new Set([0, 10, 11]);
+
+// Legendas: cada parágrafo dividido em frases curtas, com o tempo proporcional ao tamanho.
+const CAPTIONS = [];
+NARRATION.forEach((p, i) => {
+  if (NO_CAPTION.has(i)) return;
+  const parts = p.split(/(?<=[.?!:])\s+/).flatMap(s => s.length > 70 ? s.split(/(?<=,)\s+(?=\S+\s+\S+)/).reduce((acc, c) => {
+    if (acc.length && (acc[acc.length - 1] + " " + c).length <= 70) acc[acc.length - 1] += " " + c; else acc.push(c);
+    return acc;
+  }, []) : [s]);
+  const total = parts.reduce((n, s) => n + s.length, 0);
+  let t = B[i] + 0.05;
+  const span = B[i + 1] - B[i] - 0.25;
+  for (const s of parts) {
+    const d = span * s.length / total;
+    CAPTIONS.push({ a: at(t), b: at(t + d), text: s });
+    t += d;
+  }
+});
+
+// ---------------------------------------------------------------- utilidades
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const ease = x => { x = clamp(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const easeOut = x => 1 - Math.pow(1 - clamp(x), 3);
+const prog = (t, a, d) => clamp((t - a) / d);
+const lerp = (a, b, k) => a + (b - a) * k;
+
+// Opacidade de uma cena entre a e b com fade nas pontas.
+function window_(t, a, b, fi = .45, fo = .45) {
+  return Math.min(ease(prog(t, a - fi / 2, fi)), 1 - ease(prog(t, b - fo / 2, fo)));
+}
+function show(id, o, extra = "") {
+  const el = $(id);
+  el.style.opacity = o;
+  el.style.visibility = o <= 0.001 ? "hidden" : "visible";
+  if (extra) el.style.transform = extra;
+}
+// Pop: aparece subindo com fade.
+function pop(id, t, a, b = 1e9) {
+  const k = easeOut(prog(t, a, .45));
+  const out = 1 - ease(prog(t, b, .3));
+  const el = $(id);
+  el.style.opacity = Math.min(k, out);
+  el.style.transform = `translateY(${(1 - k) * 26}px) scale(${lerp(.96, 1, k)})`;
+}
+// Câmera dentro da janela: zoom s focado em (fx, fy), frações da captura.
+function cam(id, s, fx, fy) {
+  const W = 1600, H = 904;
+  let tx = W / 2 - fx * W * s, ty = H / 2 - fy * H * s;
+  tx = clamp(tx, W - W * s, 0); ty = clamp(ty, H - H * s, 0);
+  $(id).style.transform = `translate(${tx}px, ${ty}px) scale(${s})`;
+}
+function camMove(id, t, a, d, from, to) {
+  const k = ease(prog(t, a, d));
+  cam(id, lerp(from[0], to[0], k), lerp(from[1], to[1], k), lerp(from[2], to[2], k));
+}
+// Janela inteira entra levemente de baixo.
+function frameIn(scene, t, a) {
+  const k = easeOut(prog(t, a - .2, .7));
+  $(scene).querySelector(".frame").style.transform = `translateY(${(1 - k) * 30}px)`;
+}
+function chips(boxId, items) {
+  const box = $(boxId);
+  if (!box.children.length) items.forEach(([text]) => {
+    const c = document.createElement("div"); c.className = "chip"; c.textContent = text; box.appendChild(c);
+  });
+  return box.children;
+}
+function chipsAt(boxId, items, t, end) {
+  const els = chips(boxId, items);
+  items.forEach(([, when], i) => {
+    const k = easeOut(prog(t, at(when), .4));
+    const out = 1 - ease(prog(t, end - .5, .35));
+    els[i].style.opacity = Math.min(k, out);
+    els[i].style.transform = `translateY(${(1 - k) * 18}px)`;
+  });
+}
+
+// Gancho palavra por palavra.
+const HOOK = "Projetar móveis planejados não precisa custar uma fortuna.".split(" ");
+$("hook").innerHTML = HOOK.map(w => `<span class="w${w.startsWith("fortuna") ? " accent" : ""}">${w}</span>`).join("");
+
+// ---------------------------------------------------------------- render(t)
+function render(t) {
+  // 1. Gancho
+  show("s1", window_(t, 0, at(B[1]) + .05, .01));
+  [...$("hook").children].forEach((w, i) => {
+    const k = easeOut(prog(t, at(0.05 + i * 0.36), .35));
+    w.style.opacity = k;
+    w.style.transform = `translateY(${(1 - k) * 22}px)`;
+  });
+
+  // 2. Marca, depois a cozinha
+  const s2cut = at(6.4);
+  show("s2a", window_(t, at(B[1]), s2cut));
+  {
+    const k = easeOut(prog(t, at(B[1]), .8));
+    $("s2a").querySelector(".center").style.transform = `scale(${lerp(.92, 1, k)})`;
+  }
+  show("s2b", window_(t, s2cut, at(B[2])));
+  frameIn("s2b", t, s2cut);
+  camMove("s2bcam", t, s2cut, at(B[2]) - s2cut, [1, .55, .55], [1.18, .55, .55]);
+
+  // 3. Ambiente
+  show("s3", window_(t, at(B[2]), at(B[3])));
+  frameIn("s3", t, at(B[2]));
+  $("s3hl1").style.opacity = Math.min(easeOut(prog(t, at(11.6), .4)), 1 - ease(prog(t, at(14.0), .3)));
+  $("s3hl2").style.opacity = easeOut(prog(t, at(14.1), .4));
+  pop("s3t1", t, at(11.8), at(14.0));
+  pop("s3t2", t, at(14.2));
+
+  // 4. Galeria: os módulos entram um a um
+  show("s4", window_(t, at(B[3]), at(B[4])));
+  frameIn("s4", t, at(B[3]));
+  for (let k = 1; k <= 8; k++) {
+    const a = at(B[3] + 0.3 + (k - 1) * 1.15);
+    $("k" + k).style.opacity = k === 1 ? 1 : ease(prog(t, a, .3));
+  }
+  camMove("s4cam", t, at(B[3]), B[4] - B[3], [1.0, .4, .5], [1.08, .45, .5]);
+  $("s4hl").style.opacity = Math.min(easeOut(prog(t, at(17.2), .4)), 1 - ease(prog(t, at(22.6), .3)));
+  chipsAt("s4chips", [["Balcões", 18.4], ["Gaveteiros", 19.0], ["Aéreos", 19.7], ["Torres", 20.3], ["Roupeiros", 20.9], ["Nichos", 21.6]], t, at(23.0));
+  pop("s4t", t, at(23.3), at(B[4]) - .4);
+
+  // 5. Propriedades: zoom no painel, depois troca de acabamento
+  show("s5", window_(t, at(B[4]), at(B[5])));
+  frameIn("s5", t, at(B[4]));
+  {
+    const a = at(B[4]);
+    const z1 = ease(prog(t, a + .6, 1.2));          // aproxima do painel
+    const z2 = ease(prog(t, at(31.6), 1.0));          // volta para ver o acabamento
+    const k = clamp(z1 - z2);
+    cam("s5cam", lerp(1, 1.55, k), lerp(.5, .93, k), .5);
+  }
+  $("s5b").style.opacity = ease(prog(t, at(32.2), .5));
+  chipsAt("s5chips", [["Largura · Altura · Profundidade", 28.4], ["Portas · Gavetas · Prateleiras", 29.6], ["Acabamento", 32.4]], t, at(35.4));
+  pop("s5t", t, at(35.5), at(B[5]) - .3);
+
+  // 6. Ocultar frentes com a tecla F
+  show("s6", window_(t, at(B[5]), at(B[6])));
+  frameIn("s6", t, at(B[5]));
+  camMove("s6cam", t, at(B[5]), B[6] - B[5], [1.05, .45, .55], [1.3, .42, .55]);
+  {
+    const press = at(38.9);
+    const k = easeOut(prog(t, press - .5, .4));
+    const dip = Math.sin(clamp((t - press) / .25) * Math.PI);
+    const out = 1 - ease(prog(t, at(41.0), .3));
+    $("s6key").style.opacity = Math.min(k, out);
+    $("s6key").style.transform = `translateY(${(1 - k) * 30 + dip * 10}px) scale(${1 - dip * .05})`;
+    $("s6b").style.opacity = ease(prog(t, press + .05, .45));
+  }
+
+  // 7. Lista de peças
+  show("s7", window_(t, at(B[6]), at(B[7])));
+  frameIn("s7", t, at(B[6]));
+  camMove("s7cam", t, at(B[6]) + .3, 1.4, [1, .5, .5], [1.6, .22, .3]);
+  chipsAt("s7chips", [["Medidas", 46.0], ["Fita de borda", 46.9], ["Ferragens", 47.8]], t, at(B[7]) - .1);
+
+  // 8. Plano de corte
+  show("s8", window_(t, at(B[7]), at(B[8])));
+  frameIn("s8", t, at(B[7]));
+  camMove("s8cam", t, at(B[7]), B[8] - B[7], [1, .5, .5], [1.32, .48, .52]);
+  chipsAt("s8chips", [["Serra 4 mm", 51.9], ["Refilo 10 mm", 52.7], ["Sentido do veio", 53.4]], t, at(B[8]) - .1);
+
+  // 9. Orçamento
+  show("s9", window_(t, at(B[8]), at(B[9])));
+  frameIn("s9", t, at(B[8]));
+  camMove("s9cam", t, at(B[8]) + .2, 1.6, [1, .5, .5], [1.35, .32, .62]);
+  {
+    pop("s9c", t, at(55.6), at(B[9]) - .3);
+    const v = 6111.55 * easeOut(prog(t, at(55.8), 1.8));
+    $("s9v").textContent = "R$ " + v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  // 10. Exportações
+  show("s10", window_(t, at(B[9]), at(B[10])));
+  pop("c1", t, at(62.6));
+  pop("c2", t, at(64.1));
+  pop("c3", t, at(65.3));
+
+  // 11. Benefícios
+  show("s11", window_(t, at(B[10]), at(B[11])));
+  pop("l1", t, at(67.5));
+  pop("l2", t, at(68.2));
+  pop("l3", t, at(69.0));
+
+  // 12. Encerramento
+  show("s12", window_(t, at(B[11]), DURATION + 1, .6));
+  {
+    const k = easeOut(prog(t, at(B[11]), 1.0));
+    $("s12").querySelector(".center").style.transform = `scale(${lerp(.94, 1, k)})`;
+  }
+  $("stage").style.opacity = 1 - ease(prog(t, DURATION - .6, .6));
+
+  // Legenda
+  const c = CAPTIONS.find(c => t >= c.a && t < c.b);
+  const cap = $("cap");
+  if (c) {
+    cap.textContent = c.text;
+    cap.style.opacity = Math.min(easeOut(prog(t, c.a, .15)), 1 - ease(prog(t, c.b - .12, .12)));
+  } else cap.style.opacity = 0;
+}
+
+// Ids das câmeras que não têm id próprio no HTML
+document.querySelector("#s2b .cam").id = "s2bcam";
+
+window.DURATION = DURATION;
+window.render = render;
+// Pré-visualização no navegador: ?t=12.3 congela num instante; sem parâmetro, toca em tempo real.
+const q = new URLSearchParams(location.search);
+if (!q.has("render")) {
+  if (q.has("t")) render(parseFloat(q.get("t")));
+  else { const t0 = performance.now(); const loop = () => { render((performance.now() - t0) / 1000 % DURATION); requestAnimationFrame(loop); }; loop(); }
+} else render(0);
+</script>
+</body>
+</html>

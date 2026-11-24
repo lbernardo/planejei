@@ -1,0 +1,6 @@
+target/
+.DS_Store
+*.png
+!assets/*.png
+dist/
+!docs/video/composicao/img/*.png
