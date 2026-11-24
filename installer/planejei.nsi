@@ -74,6 +74,7 @@ Section "Planejei (obrigatório)" SecApp
   File "${SRC}\${EXE}"
   File "${SRC}\LICENSE.txt"
   File "${SRC}\THIRD_PARTY.md"
+  File "${SRC}\THIRD_PARTY-pt-br.md"
 
   WriteUninstaller "$INSTDIR\Desinstalar.exe"
 
@@ -118,6 +119,7 @@ Section "Uninstall"
   Delete "$INSTDIR\${EXE}"
   Delete "$INSTDIR\LICENSE.txt"
   Delete "$INSTDIR\THIRD_PARTY.md"
+  Delete "$INSTDIR\THIRD_PARTY-pt-br.md"
   Delete "$INSTDIR\Desinstalar.exe"
   RMDir "$INSTDIR"
 

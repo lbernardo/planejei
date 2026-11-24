@@ -1,91 +1,131 @@
 # Planejei
 
-Projeto de móveis planejados (marcenaria) inspirado no fluxo do Promob, irmão do GeoArq:
-o mesmo motor 3D (Rust + wgpu + egui) e a mesma navegação. Você monta o ambiente com módulos
-paramétricos e sai com **lista de peças, plano de corte e orçamento**.
+**English** · [Português (Brasil)](README-pt-br.md)
 
-Escopo e roadmap: [docs/ESCOPO.md](docs/ESCOPO.md).
+![Sample kitchen in Planejei](docs/video/composicao/img/s02.png)
 
-## Rodar
+Planejei is a desktop app for designing built-in furniture and custom cabinetry. Its workflow is
+inspired by commercial cabinet-design software such as Promob. It is a sibling of GeoArq and
+shares the same 3D engine (Rust + wgpu + egui) and the same navigation.
+
+You lay out a room with parametric modules, and Planejei gives you a **parts list, a cutting
+plan and a quote**.
+
+The interface is in Brazilian Portuguese. This README gives English translations of the menu
+and button names in parentheses.
+
+Scope and roadmap: [docs/SCOPE.md](docs/SCOPE.md). Presentation video: [docs/video](docs/video/SCRIPT.md).
+
+## Run
 
 ```bash
-cargo run --release                          # projeto vazio
-PLANEJEI_DEMO=kitchen cargo run --release    # cozinha de exemplo
-cargo run --release -- projeto.planejei      # abre um projeto
-cargo test                                   # módulos, corte, orçamento, encaixe
+cargo run --release                          # empty project
+PLANEJEI_DEMO=kitchen cargo run --release    # sample kitchen
+cargo run --release -- project.planejei      # open a project
+cargo test                                   # modules, cutting plan, quote, snapping
 ```
 
-## Gerar os instaláveis
+## Build the installers
 
 ```bash
-./scripts/build.sh            # mac + windows
-./scripts/build.sh mac        # só macOS (universal: Apple Silicon + Intel)
-./scripts/build.sh windows    # só Windows (64 bits)
+./scripts/build.sh            # macOS + Windows
+./scripts/build.sh mac        # macOS only (universal: Apple Silicon + Intel)
+./scripts/build.sh windows    # Windows only (64-bit)
 ```
 
-Roda os testes e deixa em `dist/`: `Planejei-<versão>-mac.zip` e `.dmg` (app assinado localmente),
-`Planejei-<versão>-windows.zip` (portátil) e `Planejei-<versão>-setup.exe` (instalador, associa os
-arquivos `.planejei`). Para o Windows, instale uma vez `brew install mingw-w64 makensis`.
-A versão vem do `Cargo.toml`.
+The script updates the third-party license list and runs the tests. It writes these files to
+`dist/`:
+
+- `Planejei-<version>-mac.zip` and `.dmg`: the app, with a local ad-hoc signature.
+- `Planejei-<version>-windows.zip`: a portable build.
+- `Planejei-<version>-setup.exe`: an installer that associates `.planejei` files with the app.
+
+To build for Windows from a Mac, install the toolchain once with `brew install mingw-w64 makensis`.
+The version number comes from `Cargo.toml`.
 
 ## Interface
 
-- **Galeria** (esquerda): Cozinha, Dormitório, Banheiro e Escritório. Clicar insere o módulo
-  encostado na parede do fundo, ao lado do último da mesma faixa (inferiores ou aéreos).
-- **Propriedades** (direita): L × A × P, posição, rotação, portas, gavetas, prateleiras,
-  divisórias, rodapé, cabideiro e materiais (caixa, frentes, fundo). Tudo recalcula na hora.
-  Sem nada selecionado, edita o projeto e o ambiente.
-- **Abas**: *3D*, *Plano de corte* (chapas desenhadas, aproveitamento) e *Orçamento*.
-- **Menus**: Arquivo, Editar, Visualizar, Ambiente, Inserir, Ferramentas (materiais, ferragens,
-  preços, serra e refilo), Relatórios e Ajuda.
+- **Gallery** (*Galeria*, left): Kitchen, Bedroom, Bathroom and Office.
+  - Clicking an item inserts the module against the back wall.
+  - It goes next to the last module in the same row, either base or wall cabinets.
+- **Properties** (*Propriedades*, right):
+  - Width × height × depth, position and rotation.
+  - Doors, drawers, shelves, dividers, toe kick and hanging rail.
+  - Materials for the carcass, fronts and back.
+  - Everything recalculates instantly. With nothing selected, the panel edits the project and
+    the room.
+- **Tabs**:
+  - *3D*.
+  - *Plano de corte* (cutting plan): every sheet drawn, with its yield.
+  - *Orçamento* (quote).
+- **Menus**:
+  - *Arquivo* (File), *Editar* (Edit), *Visualizar* (View), *Ambiente* (Room), *Inserir* (Insert).
+  - *Ferramentas* (Tools): materials, hardware, prices, saw kerf and trim.
+  - *Relatórios* (Reports) and *Ajuda* (Help).
 
-| Ação | Como |
+| Action | How |
 |---|---|
-| Mover módulo | arrastar (encaixa e gira para a parede mais próxima e alinha com os vizinhos) |
-| Orbitar / pan / zoom | arrastar o fundo ou o botão do meio / Shift + arrastar / roda ou pinça |
-| Girar · Duplicar · Excluir | R · Cmd/Ctrl+D · Delete |
-| Ajuste fino | setas (10 mm), Shift + setas (100 mm) |
-| Vistas | 0 Iso · 1 Topo · 2 Frente · 3 Fundos · 4 Esquerda · 5 Direita · Shift+Z extensões |
-| Ocultar portas e frentes | F |
+| Move a module | drag it (it snaps and turns to the nearest wall and lines up with its neighbours) |
+| Orbit / pan / zoom | drag the background or middle button / Shift + drag / wheel or pinch |
+| Rotate · Duplicate · Delete | R · Cmd/Ctrl+D · Delete |
+| Nudge | arrow keys (10 mm), Shift + arrows (100 mm) |
+| Views | 0 Iso · 1 Top · 2 Front · 3 Back · 4 Left · 5 Right · Shift+Z zoom to fit |
+| Hide doors and fronts | F |
 
-As paredes que ficam entre a câmera e o ambiente somem sozinhas.
+Walls between the camera and the room hide automatically.
 
-## Exportações
+## Exports
 
-- **Lista de peças (CSV)**, separada por `;`, para otimizadores e seccionadoras
-- **Plano de corte (SVG)**
-- **Proposta (HTML)**: módulos, orçamento, lista de peças e plano de corte. Abre no navegador;
-  Imprimir › Salvar como PDF.
+- **Parts list (CSV)**: `;`-separated, ready for cutting optimizers and panel saws.
+- **Cutting plan (SVG)**.
+- **Proposal (HTML)**: modules, quote, parts list and cutting plan. It opens in the browser; use
+  Print › Save as PDF to get a PDF.
 
-## Ambiente do GeoArq
+## GeoArq rooms
 
-**Arquivo › Importar ambiente do GeoArq…** carrega a geometria de um `.geoarq` como referência
-(o caminho fica salvo no projeto e o ambiente é recarregado ao abrir).
+**Arquivo › Importar ambiente do GeoArq…** (File › Import GeoArq room) loads the geometry of a
+`.geoarq` file as a visual reference. The path is saved in the project, and the room reloads when
+you open it.
 
-## Código
+## Code
 
-| Arquivo | O quê |
+| File | What it does |
 |---|---|
-| `module.rs` | módulos paramétricos → peças (corte, fita de borda) e ferragens; galeria |
-| `cutting.rs` | plano de corte em guilhotina (serra, refilo, veio) |
-| `budget.rs` | orçamento (chapas, fita, ferragens, mão de obra, margem) |
-| `project.rs` | projeto, ambiente, encaixe, `.planejei` e leitura do `.geoarq` |
-| `reports.rs` | CSV, SVG e HTML |
-| `app.rs` | interface |
-| `renderer.rs`, `camera.rs`, `geom/`, `textures.rs`, `shader.wgsl` | motor copiado do GeoArq |
+| `module.rs` | parametric modules → boards (cut size, edge banding) and hardware; the gallery |
+| `cutting.rs` | guillotine cutting plan (saw kerf, trim, wood grain) |
+| `budget.rs` | quote (sheets, edge banding, hardware, labour, margin) |
+| `project.rs` | project, room, snapping, `.planejei` files and `.geoarq` import |
+| `reports.rs` | CSV, SVG and HTML exports |
+| `app.rs` | user interface |
+| `renderer.rs`, `camera.rs`, `geom/`, `textures.rs`, `shader.wgsl` | engine shared with GeoArq |
 
-Para conferir visualmente: `PLANEJEI_DEMO=kitchen PLANEJEI_TAB=cut|budget PLANEJEI_SELECT=2
-PLANEJEI_SCREENSHOT=saida.png cargo run` salva uma captura e fecha (`PLANEJEI_CATALOG=1` abre a
-janela de materiais).
+### Development variables
 
-## Licença
+To check the UI visually, run `PLANEJEI_SCREENSHOT=out.png cargo run`. It saves a screenshot and
+exits. Combine it with:
+
+| Variable | Effect |
+|---|---|
+| `PLANEJEI_DEMO=kitchen` | opens the sample kitchen |
+| `PLANEJEI_TAB=cut` or `budget` | starts on the cutting plan or quote tab |
+| `PLANEJEI_SELECT=2` | selects the module at index 2 |
+| `PLANEJEI_VIEW=top`, `front`… | initial camera view |
+| `PLANEJEI_HIDE_FRONTS=1` | hides doors and fronts |
+| `PLANEJEI_CATALOG=1`, `PLANEJEI_PARTS=1`, `PLANEJEI_ABOUT=1` | opens the materials, parts list or About window |
+| `PLANEJEI_SIZE=1600x900` | window size |
+| `PLANEJEI_DUMP=folder` | writes the project and its exports (CSV, SVG, HTML) to that folder |
+
+The icon is drawn in `assets/icon.svg`. The files `icon.png`, `icon.icns` and `icon.ico` are
+generated from it.
+
+## License
 
 Copyright (C) 2026 Lucas Bernardo.
 
-O Planejei é software livre: você pode redistribuí-lo e modificá-lo nos termos da
-[GNU General Public License](LICENSE), versão 3 ou (a seu critério) qualquer versão posterior
-(`GPL-3.0-or-later`). Ele é distribuído sem nenhuma garantia.
+Planejei is free software. You can redistribute it and modify it under the terms of the
+[GNU General Public License](LICENSE), version 3 or (at your option) any later version
+(`GPL-3.0-or-later`). It comes with no warranty.
 
-As bibliotecas e fontes de terceiros estão em [THIRD_PARTY.md](THIRD_PARTY.md), gerado por
-`./scripts/third_party.sh` (o `build.sh` roda esse script sozinho). Quem distribuir os
-instaláveis também precisa oferecer o código-fonte correspondente, como manda a GPL.
+Third-party libraries and fonts are listed in [THIRD_PARTY.md](THIRD_PARTY.md). The script
+`./scripts/third_party.sh` generates that file, and `build.sh` runs it automatically. Anyone who
+distributes the installers must also offer the corresponding source code, as the GPL requires.

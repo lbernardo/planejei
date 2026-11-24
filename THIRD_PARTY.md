@@ -1,22 +1,24 @@
-# Licenças de terceiros
+# Third-party licenses
 
-O Planejei é distribuído sob a [GPL-3.0-or-later](LICENSE). Ele é compilado junto com as
-bibliotecas abaixo (345 pacotes Rust), todas com licenças compatíveis com a GPL-3.0.
-Os textos completos de cada licença acompanham o código-fonte de cada pacote
+**English** · [Português (Brasil)](THIRD_PARTY-pt-br.md)
+
+Planejei is distributed under the [GPL-3.0-or-later](LICENSE). It is compiled together with
+the libraries below (345 Rust packages), all under licenses compatible with the GPL-3.0.
+The full text of each license ships with the source code of each package
 ([crates.io](https://crates.io)).
 
-## Fontes embutidas na interface
+## Fonts embedded in the interface
 
-O egui (biblioteca da interface) embute estas fontes no executável:
+egui (the interface library) embeds these fonts in the executable:
 
-| Fonte | Licença |
+| Font | License |
 |---|---|
 | Ubuntu Light | [Ubuntu Font Licence 1.0](https://ubuntu.com/legal/font-licence) |
-| Hack | MIT; partes da Bitstream Vera (Bitstream Vera License) e da DejaVu (domínio público) |
+| Hack | MIT; parts from Bitstream Vera (Bitstream Vera License) and DejaVu (public domain) |
 | Noto Emoji | [SIL Open Font License 1.1](https://openfontlicense.org) |
-| Emoji Icon Font (ícones do egui) | MIT |
+| Emoji Icon Font (egui icons) | MIT |
 
-## Pacotes Rust por licença
+## Rust packages by license
 
 ### MIT OR Apache-2.0 (227)
 
@@ -85,4 +87,3 @@ O egui (biblioteca da interface) embute estas fontes no executável:
 ### MIT OR Apache-2.0 OR LGPL-2.1-or-later (1)
 
 `r-efi 6.0.0`
-

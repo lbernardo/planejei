@@ -1,5 +1,7 @@
 # Planejei — escopo
 
+[English](SCOPE.md) · **Português (Brasil)**
+
 Projeto de **móveis planejados** (marcenaria) inspirado no fluxo do Promob, irmão do
 [GeoArq](../../sketchuo): mesmo motor (Rust + wgpu + egui), mesma navegação e mesmos atalhos
 de câmera. O GeoArq desenha o ambiente; o Planejei mobilia, detalha e **orça**.

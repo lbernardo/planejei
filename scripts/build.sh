@@ -48,7 +48,7 @@ build_mac() {
     -output "$app/Contents/MacOS/$APP"
 
   cp assets/icon.icns "$app/Contents/Resources/$APP.icns"
-  cp LICENSE THIRD_PARTY.md "$app/Contents/Resources/"
+  cp LICENSE THIRD_PARTY.md THIRD_PARTY-pt-br.md "$app/Contents/Resources/"
 
   cat > "$app/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
@@ -110,7 +110,7 @@ build_windows() {
   cp "target/$target/release/$BIN.exe" "$DIST/windows/$APP.exe"
   # Texto com quebras de linha do Windows, para abrir certo no Bloco de Notas.
   awk '{ printf "%s\r\n", $0 }' LICENSE > "$DIST/windows/LICENSE.txt"
-  cp THIRD_PARTY.md "$DIST/windows/"
+  cp THIRD_PARTY.md THIRD_PARTY-pt-br.md "$DIST/windows/"
 
   local zip="$DIST/$APP-$VERSION-windows.zip"
   rm -f "$zip"

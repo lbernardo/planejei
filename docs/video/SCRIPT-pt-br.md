@@ -1,7 +1,11 @@
 # Planejei: vídeo de apresentação
 
+[English](SCRIPT.md) · **Português (Brasil)**
+
+Vídeo pronto: [planejei-apresentacao.mp4](planejei-apresentacao.mp4) (77 s, 1920×1080).
+
 - **Formato:** 16:9 (1920×1080), para YouTube, site e LinkedIn
-- **Duração:** cerca de 75 a 85 segundos
+- **Duração:** 77 segundos (narração de 74 s)
 - **Estilo:** narração em off sobre capturas reais do programa, com títulos animados e legendas
 
 ## 1. Texto para o ElevenLabs
@@ -61,37 +65,32 @@ do ElevenLabs:
 
 | # | Narração (resumo) | O que aparece na tela |
 |---|---|---|
-| 1 | Projetar móveis… fortuna | Fundo escuro. Frase em destaque, digitada palavra por palavra |
-| 2 | Conheça o Planejei… | Logo e nome "Planejei". Abre a cozinha de exemplo em 3D com um giro lento da câmera |
-| 3 | Comece pelo ambiente… | Painel *Ambiente* com as medidas e a sala vazia. Menção ao GeoArq com o ícone dele |
-| 4 | Escolha na galeria… | Galeria à esquerda. Os módulos entram um a um e encaixam na parede |
-| 5 | Precisa ajustar? | Painel de propriedades. Largura e número de gavetas mudando, acabamento trocado para Grafite e Carvalho |
-| 6 | Quer ver por dentro? | Tecla **F** na tela. Portas somem e aparecem prateleiras e divisórias |
-| 7 | Lista de peças | Janela *Lista de peças* rolando, com as colunas medida, fita e material destacadas |
-| 8 | Plano de corte | Aba *Plano de corte*. Zoom numa chapa com o selo "% de aproveitamento" |
-| 9 | Orçamento | Aba *Orçamento*. O total **R$ 6.111,55** sobe contando |
-| 10 | Exporte… | Três cartões entram: CSV, SVG e proposta em HTML aberta no navegador |
-| 11 | Leve, rápido… | Comparação simples: "Tudo incluso · Nativo e leve · Seus preços" |
-| 12 | Planejei. Do projeto ao corte… | Logo, slogan e chamada final (site ou contato, a definir) |
+| 1 | Projetar móveis… fortuna | Fundo escuro. A frase entra palavra por palavra, com "fortuna" em cor de madeira |
+| 2 | Conheça o Planejei… | Ícone, nome e "Do desenho ao orçamento, em minutos". Depois, a cozinha de exemplo em 3D com zoom lento |
+| 3 | Comece pelo ambiente… | Sala vazia. Destaque no painel *Ambiente* ("Medidas do ambiente") e depois no botão de importar ("ou importe do GeoArq") |
+| 4 | Escolha na galeria… | Galeria destacada. Os módulos entram um a um, com etiquetas: balcões, gaveteiros, aéreos, torres, roupeiros, nichos. Fecha com "Encaixa sozinho na parede" |
+| 5 | Precisa ajustar? | Zoom no painel de propriedades do gaveteiro. Depois, as frentes trocam de Grafite para Carvalho e o gaveteiro passa a 4 gavetas |
+| 6 | Quer ver por dentro? | A tecla **F** aparece e é "pressionada". Portas e frentes somem e aparecem prateleiras e divisórias |
+| 7 | Lista de peças | Zoom na janela *Lista de peças*, com as etiquetas medidas, fita de borda e ferragens |
+| 8 | Plano de corte | Aba *Plano de corte* com zoom na primeira chapa e as etiquetas serra 4 mm, refilo 10 mm e sentido do veio |
+| 9 | Orçamento | Aba *Orçamento* com zoom na tabela. Um cartão mostra o total subindo até **R$ 6.111,55** |
+| 10 | Exporte… | Três cartões: lista de peças (CSV), plano de corte (SVG) e proposta (HTML) |
+| 11 | Leve, rápido… | "Leve. Rápido. Sem pagar caro por módulo." |
+| 12 | Planejei. Do projeto ao corte… | Ícone, nome e slogan |
 
 **Ao longo do vídeo:**
 - Legenda em todas as falas.
-- Trilha leve e instrumental, com volume baixo sob a voz.
+- Sem trilha por enquanto (ver a seção 3).
 - Cores do vídeo seguem as da interface: claro, azul de seleção e madeira.
 
-## 3. Próximos passos
+## 3. Situação
 
-1. Gerar o áudio no ElevenLabs com o texto da seção 1 e me enviar o arquivo.
-2. Com o áudio em mãos:
-   - Meço o tempo de cada parágrafo.
-   - Gravo as capturas de cada cena com o próprio Planejei, pelo modo de captura automática.
-   - Monto o vídeo com o Hyperframes (HTML), com títulos, legendas e transições sincronizados
-     com a narração.
-   - Exporto em MP4.
-3. Ainda falta você me passar:
-   - A chamada final (site, Instagram ou WhatsApp).
-   - Se quer uma trilha específica. Sem isso, deixo o espaço para você colocar uma trilha
-     livre de direitos.
+- [x] Narração gerada no ElevenLabs (voz "Marcio", `audio/narracao.mp3`).
+- [x] Tempos de cada parágrafo medidos pelas pausas do áudio.
+- [x] Capturas de cada cena gravadas com o próprio Planejei.
+- [x] Vídeo montado e exportado em MP4, já com o ícone novo.
+- [ ] Chamada final (site, Instagram ou WhatsApp).
+- [ ] Trilha sonora instrumental, livre de direitos, com volume baixo sob a voz.
 
 ## 4. Como o vídeo é gerado
 
